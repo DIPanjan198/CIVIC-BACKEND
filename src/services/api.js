@@ -1,13 +1,16 @@
 import axios from "axios";
 
 const api = axios.create({
-  baseURL: "http://localhost:5000/api"
+  baseURL:
+    process.env.NODE_ENV === "production"
+      ? "https://civic-backend-00ge.onrender.com/api"
+      : "http://localhost:5000/api",
 });
 
-api.interceptors.request.use(config => {
+api.interceptors.request.use((config) => {
   const token = localStorage.getItem("token");
   if (token) {
-    config.headers.Authorization = token;
+    config.headers.Authorization = `Bearer ${token}`;
   }
   return config;
 });
